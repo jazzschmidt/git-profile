@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-PROFILES_PATH=$(git config --global profiles.path || echo "${HOME}/.gitprofiles")
+PROFILES_PATH=$(git config --global profiles.path || echo "${HOME}/.git/profiles")
 mkdir -p "$PROFILES_PATH"
 
 DEFAULT_USER=$(git config --global user.name || echo "undefined")

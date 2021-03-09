@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash -x
 
 function absolute_path() {
   (
@@ -31,9 +31,15 @@ mkdir -p "$pluginPath" || >&2 echo "FATAL: Could not create directory: $pluginPa
 [ -d "$pluginPath" ] || >&2 echo "FATAL: Is not a directory: $pluginPath" && exit 1
 [ -f "$pluginPath/git-profile" ] && >&2 echo "FATAL: There is already a \`git-profile\` file in $pluginPath"
 
+profilesPath=""
+defaultProfilesPath="$HOME/.git/profiles"
+echo "Profile configurations will be written into:"
+read -rp "Select a directory [$defaultProfilesPath]: " profilesPath
+
 chmod +x pre-commit.sh && mv pre-commit.sh "$hooksPath/pre-commit"
 chmod +x git-profile.sh && mv git-profile.sh "$pluginPath/git-profile"
 
+git config --global profiles.path "$profilesPath"
 git config --global core.hooksPath "$hooksPath"
 git config --global alias.profile "!$pluginPath/git-profile"
 git config --global profile.enabled true
