@@ -35,6 +35,7 @@ profilesPath=""
 defaultProfilesPath="$HOME/.git/profiles"
 echo "Profile configurations will be written into:"
 read -rp "Select a directory [$defaultProfilesPath]: " profilesPath
+profilesPath="${profilesPath:-$defaultProfilesPath}"
 
 chmod +x pre-commit.sh && mv pre-commit.sh "$hooksPath/pre-commit"
 chmod +x git-profile.sh && mv git-profile.sh "$pluginPath/git-profile"
