@@ -1,62 +1,14 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-function select_profile() {
-  authors=$(git config --global user.profiles)
-  authorsExists=$?
+enabled=$(git config profile.enabled)
+enabled=${enabled:-true}
 
-  if [ ${authorsExists} -eq 0 ]; then
-    IFS_old=$IFS
-    IFS="|"
-    PS3="Select a profile: "
-    select profile in "new profile" $authors
-    do
-      if [ "${profile}" = "new profile" ]; then
-        break
-      fi
-
-      if [ -n "${profile}" ]; then
-        name=$(echo "${profile}" | sed "s/ <.*//")
-        email=$(echo "${profile}" | cut -d"<" -f2 | cut -d">" -f1)
-        git config --local user.name "$name"
-        git config --local user.email "$email"
-        exit;
-      fi
-
-    done
-    IFS=$IFS_old
-  fi
-
-  read -rp "Name: " name
-  read -rp "E-Mail: " email
-
-  git config --local user.name "$name"
-  git config --local user.email "$email"
-
-  if [ ${authorsExists} -eq 0 ]; then
-    git config --global user.profiles "${name} <${email}>|${authors}"
-  else
-    git config --global user.profiles "${name} <${email}>"
-  fi
-
+if [ "$enabled" = "false" ]; then
   exit
-}
+fi
 
-if ! >/dev/null git config --local user.name ; then
-  echo "No author profile explicitly set."
-
-  name=$(git config --global user.name)
-  email=$(git config --global user.email)
-
-  while true; do
-    read -r -n 1 -t 30 -p "Proceed as ${name:-undefined} <${email:-undefined}>? [y/n]: " answer
-    echo ""
-    case $answer in
-        [Yy]* )
-          git config --local user.name "${name}"
-          git config --local user.email "${email}"
-          exit;;
-        [Nn]* ) select_profile ;;
-        * ) exit 1;;
-    esac
-  done
+if ! >/dev/null git profile 2>&1; then
+  echo "FATAL: No profile set, aborting commit." >&2
+  echo "See \`git profile help\` for further help or use \`git profile disable\` to disable profile checking." >&2
+  exit 1
 fi

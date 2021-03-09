@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 PROFILES_PATH=$(git config --global profiles.path || echo "${HOME}/.gitprofiles")
 mkdir -p "$PROFILES_PATH"
@@ -48,8 +48,8 @@ SUBCOMMANDS:
     remove [profile]  Removes a profile
     apply [profile]   Applies a profile configuration
     reset             Resets to default configuration
-    disable           Disables profiles checking
-    enable            Enables profiles checking
+    disable           Disables profile checking before committing changes
+    enable            Prevents commits without any applied profile
     help              Shows this help\
 "
 }
@@ -93,7 +93,7 @@ function active_profile() {
   if [ $? ] && [ -n "$profile" ]; then
     echo "$profile"
   else
-    2>&1 echo "No active profile" && exit 1
+    >&2 echo "No active profile" && exit 1
   fi
 }
 
@@ -102,7 +102,7 @@ function reset_profile() {
     profile=$(active_profile)
 
     if [ $? -ne 0 ]; then
-      2>&1 echo "$profile" && exit 1
+      >&2 echo "$profile" && exit 1
     fi
 
     file="${PROFILES_PATH}/$profile"
@@ -139,7 +139,7 @@ function select_profile() {
   available_profiles=$(list_profiles)
 
   if [ $? -ne 0 ]; then
-    2>&1 echo "${available_profiles}" && exit 1
+    >&2 echo "${available_profiles}" && exit 1
   fi
 
   IFS_old=$IFS; IFS=$'\n'
@@ -168,7 +168,7 @@ function create_profile() {
 
     file="${PROFILES_PATH}/${profile}"
     if [ -f "${file}" ]; then
-      2>&1 echo "Profile already exists: ${profile}" && exit 1
+      >&2 echo "Profile already exists: ${profile}" && exit 1
     fi
 
     read -rp "user name [${DEFAULT_USER}]: " user
@@ -221,7 +221,7 @@ function list_profiles() {
   done
 
   if $empty; then
-    2>&1 echo "No profiles available" && exit 1
+    >&2 echo "No profiles available" && exit 1
   fi
 }
 
@@ -241,7 +241,7 @@ function assert_profile_exists() {
   file="${PROFILES_PATH}/${profile}"
 
   if [ ! -f "$file" ]; then
-    2>&1 echo "Profile does not exist: ${profile}" && exit 1
+    >&2 echo "Profile does not exist: ${profile}" && exit 1
   fi
 }
 
