@@ -1,10 +1,14 @@
 #!/usr/bin/env bash
 
-PROFILES_PATH=$(git config --global profiles.path || echo "${HOME}/.git/profiles")
+PROFILES_PATH=$(git config --global profiles.path)
+PROFILES_PATH=${PROFILES_PATH:-"${HOME}/.git/profiles"}
 mkdir -p "$PROFILES_PATH"
 
-DEFAULT_USER=$(git config --global user.name || echo "undefined")
-DEFAULT_EMAIL=$(git config --global user.email || echo "undefined")
+DEFAULT_USER=$(git config user.name)
+DEFAULT_USER=${DEFAULT_USER:-"undefined"}
+
+DEFAULT_EMAIL=$(git config user.email)
+DEFAULT_EMAIL=${DEFAULT_EMAIL:-"undefined"}
 
 function main() {
   local command="$1"
