@@ -41,7 +41,7 @@ git config --global profile.enabled true
 echo "Finished installation."
 echo "----------------------"
 echo "Thanks for using this plugin!"
-echo "Feel free to support me via GitHub: https://github.com/jazzschmidt/git-commit-user-profiles"
+echo "Feel free to support me via GitHub: https://github.com/jazzschmidt/git-profile"
 echo ""
 
 remove=""
