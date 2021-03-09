@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/usr/bin/env bash
 
 function absolute_path() {
   (
@@ -17,8 +17,8 @@ if [ $? -ne 0 ]; then # Hooks path not set
   hooksPath=${hooksPath:-$defaultHooksPath}
 fi
 
-mkdir -p "$hooksPath" || >&2 echo "FATAL: Could not create directory: $hooksPath" && exit 1
-[ -d "$hooksPath" ] || >&2 echo "FATAL: Is not a directory: $hooksPath" && exit 1
+mkdir -p "$hooksPath"
+[ ! -d "$hooksPath" ] && >&2 echo "FATAL: Is not a directory: $hooksPath" && exit 1
 [ -f "$hooksPath/pre-commit" ] && >&2 echo "FATAL: There is already a pre-commit hook in $hooksPath" && exit 1
 
 pluginPath=""
@@ -27,8 +27,8 @@ echo "Profiles plugin will be installed into:"
 read -rp "Select a directory [$defaultPluginPath]: " pluginPath
 pluginPath="${pluginPath:-$defaultPluginPath}"
 
-mkdir -p "$pluginPath" || >&2 echo "FATAL: Could not create directory: $pluginPath" && exit 1
-[ -d "$pluginPath" ] || >&2 echo "FATAL: Is not a directory: $pluginPath" && exit 1
+mkdir -p "$pluginPath"
+[ ! -d "$pluginPath" ] && >&2 echo "FATAL: Is not a directory: $pluginPath" && exit 1
 [ -f "$pluginPath/git-profile" ] && >&2 echo "FATAL: There is already a \`git-profile\` file in $pluginPath"
 
 profilesPath=""
@@ -44,6 +44,7 @@ git config --global core.hooksPath "$hooksPath"
 git config --global alias.profile "!$pluginPath/git-profile"
 git config --global profile.enabled true
 
+echo
 echo "Finished installation."
 echo "----------------------"
 echo "Thanks for using this plugin!"
