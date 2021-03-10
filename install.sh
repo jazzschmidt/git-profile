@@ -1,61 +1,73 @@
 #!/usr/bin/env bash
 
-function absolute_path() {
+set -e
+
+INSTALL_PATH=${INSTALL_PATH:-/usr/local/bin}
+
+DEFAULT_HOOKS_PATH="$HOME/.git/hooks"
+DEFAULT_PROFILES_PATH="$HOME/.git/profiles"
+
+TAR_BALL_URL="https://api.github.com/repos/jazzschmidt/git-profile/tarball/$RELEASE"
+
+function main() {
+  if [ -z "$RELEASE" ]; then
+    error "No version specified. Set \$RELEASE to a valid released version."
+  fi
+
+  # Configure hook path if not already present
+  if ! hooksPath=$(git config --global core.hooksPath); then
+    echo "Hook will be installed into:"
+    read -rp "Select a directory [$DEFAULT_HOOKS_PATH]: " hooksPath
+    hooksPath=${hooksPath:-$DEFAULT_HOOKS_PATH}
+  fi
+
+
+  # Configure profiles path if not already present
+  if ! profilesPath=$(git config --global profiles.path); then
+    echo "Profile configurations will be written into:"
+    read -rp "Select a directory [$DEFAULT_PROFILES_PATH]: " profilesPath
+    profilesPath=${profilesPath:-$DEFAULT_PROFILES_PATH}
+  fi
+
+
+  echo -n "Downloading $RELEASE... "
+  dir=$(mktemp -d)
   (
-    cd "$(dirname $1)"; echo "$PWD/$(basename $1)"
-  )
+    curl -fsSL "$TAR_BALL_URL" -o "$dir/git-profiles.tar.gz"
+    tar -xzf "$dir/git-profiles.tar.gz" -C "$dir" --strip-components 1 &>/dev/null
+  ) >/dev/null
+  if [ ! $? ] ; then
+    echo "" && error "Download failed"
+  fi
+  echo "done"
+
+  echo -n "Installing... "
+  (
+    mkdir -p "$hooksPath" "$profilesPath"
+    cp "$dir/git-profile.sh" "$INSTALL_PATH/git-profile" && chmod +x "$INSTALL_PATH/git-profile"
+    cp "$dir/pre-commit.sh" "$hooksPath/pre-commit" && chmod +x "$hooksPath/pre-commit"
+
+    git config --global core.hooksPath "$hooksPath"
+    git config --global profile.path "$profilesPath"
+    git config --global profile.enabled true
+  ) >/dev/null
+  if [ ! $? ] ; then
+    echo "" && error "Installation failed"
+  fi
+  rm -rf "$dir"
+  echo "done"
+
+  echo
+  echo "Finished installation."
+  echo "----------------------"
+  echo "Thanks for using this plugin!"
+  echo "Feel free to support me via GitHub: https://github.com/jazzschmidt/git-profile"
+  echo ""
 }
 
-script=$(absolute_path "$0")
-hooksPath=$(git config --global core.hooksPath)
 
-if [ $? -ne 0 ]; then # Hooks path not set
-  defaultHooksPath="$HOME/.git/hooks"
+function error() {
+  >&2 echo "fatal: $1" && exit 1
+}
 
-  echo "Hook will be installed into:"
-  read -rp "Select a directory [$defaultHooksPath]: " hooksPath
-  hooksPath=${hooksPath:-$defaultHooksPath}
-fi
-
-mkdir -p "$hooksPath"
-[ ! -d "$hooksPath" ] && >&2 echo "FATAL: Is not a directory: $hooksPath" && exit 1
-[ -f "$hooksPath/pre-commit" ] && >&2 echo "FATAL: There is already a pre-commit hook in $hooksPath" && exit 1
-
-pluginPath=""
-defaultPluginPath="$HOME/.git/addons"
-echo "Profiles plugin will be installed into:"
-read -rp "Select a directory [$defaultPluginPath]: " pluginPath
-pluginPath="${pluginPath:-$defaultPluginPath}"
-
-mkdir -p "$pluginPath"
-[ ! -d "$pluginPath" ] && >&2 echo "FATAL: Is not a directory: $pluginPath" && exit 1
-[ -f "$pluginPath/git-profile" ] && >&2 echo "FATAL: There is already a \`git-profile\` file in $pluginPath"
-
-profilesPath=""
-defaultProfilesPath="$HOME/.git/profiles"
-echo "Profile configurations will be written into:"
-read -rp "Select a directory [$defaultProfilesPath]: " profilesPath
-profilesPath="${profilesPath:-$defaultProfilesPath}"
-mkdir -p "$profilesPath"
-
-chmod +x pre-commit.sh && mv pre-commit.sh "$hooksPath/pre-commit"
-chmod +x git-profile.sh && mv git-profile.sh "$pluginPath/git-profile"
-
-git config --global profiles.path "$profilesPath"
-git config --global core.hooksPath "$hooksPath"
-git config --global alias.profile "!$pluginPath/git-profile"
-git config --global profile.enabled true
-
-echo
-echo "Finished installation."
-echo "----------------------"
-echo "Thanks for using this plugin!"
-echo "Feel free to support me via GitHub: https://github.com/jazzschmidt/git-profile"
-echo ""
-
-remove=""
-read -rn1 -p "Remove install script? [Y/n]: " remove
-echo ""
-if [ "$remove" = "y" ] || [ "$remove" = "Y" ]; then
-  rm "$script"
-fi
+main "$@"
