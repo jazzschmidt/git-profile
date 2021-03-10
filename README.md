@@ -8,6 +8,14 @@ management addon, such configurations can be easily applied.
 By default, it prevents any commit when no explicit profile is
 set and thus prevents horrendous rebasings.
 
+## Installation
+Just hit this from your shell with the `RELEASE` variable prepended:
+
+```
+$ RELEASE=v1.0 bash -c "$(curl -fsSL https://raw.github.com/jazzschmidt/git-profile/master/install.sh)"
+```
+
+
 ## Usage
 ### Create a Profile
 The create subcommand creates a new profile with the default
@@ -40,4 +48,3 @@ Explicitly apply a profile to let the commit pass:
 ```
 $ git profile apply corporate
 ```
-
