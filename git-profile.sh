@@ -2,7 +2,6 @@
 
 PROFILES_PATH=$(git config --global profiles.path)
 PROFILES_PATH=${PROFILES_PATH:-"${HOME}/.git/profiles"}
-mkdir -p "$PROFILES_PATH"
 
 DEFAULT_USER=$(git config user.name)
 DEFAULT_USER=${DEFAULT_USER:-"undefined"}
@@ -59,28 +58,28 @@ SUBCOMMANDS:
 }
 
 function edit_profile() {
-    local profile=$1; local editor; local file
+  local profile=$1; local editor; local file
 
-    if [ -z "$profile" ]; then
-      profile=$(select_profile)
-    fi
+  if [ -z "$profile" ]; then
+    profile=$(select_profile)
+  fi
 
-    assert_profile_exists "$profile"
-    file="${PROFILES_PATH}/$profile"
+  assert_profile_exists "$profile"
+  file="${PROFILES_PATH}/$profile"
 
-    editor=$(git config core.editor)
-    if [ $? -ne 0 ] || [ -z "$editor" ]; then
-      editor=${EDITOR:-}
+  editor=$(git config core.editor)
+  if [ $? -ne 0 ] || [ -z "$editor" ]; then
+    editor=${EDITOR:-}
 
-      [ -z "$editor" ] && >/dev/null command -v editor && editor="editor"
-      [ -z "$editor" ] && >/dev/null command -v nano && editor="nano"
-      [ -z "$editor" ] && >/dev/null command -v vim && editor="vim"
-      [ -z "$editor" ] && >/dev/null command -v vi && editor="vi"
+    [ -z "$editor" ] && >/dev/null command -v editor && editor="editor"
+    [ -z "$editor" ] && >/dev/null command -v nano && editor="nano"
+    [ -z "$editor" ] && >/dev/null command -v vim && editor="vim"
+    [ -z "$editor" ] && >/dev/null command -v vi && editor="vi"
 
-      [ -z "$editor" ] && 2>&1 echo "No editor found" && exit 1
-    fi
+    [ -z "$editor" ] && 2>&1 echo "No editor found" && exit 1
+  fi
 
-    command $editor "$file"
+  command $editor "$file"
 }
 
 function enable_profiles() {
@@ -92,6 +91,8 @@ function disable_profiles() {
 }
 
 function active_profile() {
+  assert_git_repository
+
   local profile;
   profile=$(git config --local profile.name)
   if [ $? ] && [ -n "$profile" ]; then
@@ -102,24 +103,28 @@ function active_profile() {
 }
 
 function reset_profile() {
-    local profile; local file
-    profile=$(active_profile)
+  assert_git_repository
 
-    if [ $? -ne 0 ]; then
-      >&2 echo "$profile" && exit 1
-    fi
+  local profile; local file
+  profile=$(active_profile)
 
-    file="${PROFILES_PATH}/$profile"
-    IFS_old=$IFS; IFS=$'\n'
-    for config in $(cat "$file"); do
-      git config --local --unset "${config%=*}"
-    done
-    IFS=$IFS_old
+  if [ $? -ne 0 ]; then
+    >&2 echo "$profile" && exit 1
+  fi
 
-    git config --local --unset profile.name
+  file="${PROFILES_PATH}/$profile"
+  IFS_old=$IFS; IFS=$'\n'
+  for config in $(cat "$file"); do
+    git config --local --unset "${config%=*}"
+  done
+  IFS=$IFS_old
+
+  git config --local --unset profile.name
 }
 
 function apply_profile() {
+  assert_git_repository
+
   local profile=$1; local file
 
   if [ -z "$profile" ]; then
@@ -163,51 +168,51 @@ function select_profile() {
 }
 
 function create_profile() {
-    local profile=$1; local name; local email; local description;
-    local file;
+  local profile=$1; local name; local email; local description;
+  local file;
 
-    if [ -z "$profile" ]; then
-      read -rp "Profile name: " profile
-    fi
+  if [ -z "$profile" ]; then
+    read -rp "Profile name: " profile
+  fi
 
-    file="${PROFILES_PATH}/${profile}"
-    if [ -f "${file}" ]; then
-      >&2 echo "Profile already exists: ${profile}" && exit 1
-    fi
+  file="${PROFILES_PATH}/${profile}"
+  if [ -f "${file}" ]; then
+    >&2 echo "Profile already exists: ${profile}" && exit 1
+  fi
 
-    read -rp "user name [${DEFAULT_USER}]: " user
-    read -rp "user e-mail [${DEFAULT_EMAIL}]: " email
-    read -rp "description [${user:-$DEFAULT_USER} <${email:-$DEFAULT_EMAIL}>]: " description
+  read -rp "user name [${DEFAULT_USER}]: " user
+  read -rp "user e-mail [${DEFAULT_EMAIL}]: " email
+  read -rp "description [${user:-$DEFAULT_USER} <${email:-$DEFAULT_EMAIL}>]: " description
 
-    touch "$file"
+  touch "$file"
 
-    if [ -n "$description" ]; then
-      >> "$file" echo "profile.description=${description}"
-    fi
+  if [ -n "$description" ]; then
+    >> "$file" echo "profile.description=${description}"
+  fi
 
-    if [ -n "$user" ]; then
-      >> "$file" echo "user.name=${user}"
-    fi
+  if [ -n "$user" ]; then
+    >> "$file" echo "user.name=${user}"
+  fi
 
-    if [ -n "$email" ]; then
-      >> "$file" echo "user.email=${email}"
-    fi
+  if [ -n "$email" ]; then
+    >> "$file" echo "user.email=${email}"
+  fi
 
-    echo "Created profile ${profile} in ${PROFILES_PATH}"
+  echo "Created profile ${profile} in ${PROFILES_PATH}"
 }
 
 function remove_profile() {
-    local profile=$1; local file
+  local profile=$1; local file
 
-    if [ -z "$profile" ]; then
-      profile=$(select_profile)
-    fi
+  if [ -z "$profile" ]; then
+    profile=$(select_profile)
+  fi
 
-    assert_profile_exists "$profile"
+  assert_profile_exists "$profile"
 
-    file="${PROFILES_PATH}/${profile}"
+  file="${PROFILES_PATH}/${profile}"
 
-    rm "$file" && echo "Removed profile ${profile}"
+  rm "$file" && echo "Removed profile ${profile}"
 }
 
 function list_profiles() {
@@ -230,14 +235,14 @@ function list_profiles() {
 }
 
 function get_config() {
-    local file=$1; local key=$2; local defaultValue=$3
-    local value
-    value=$(cat "$file" | grep "$key=")
-    if [ $? ] && [ -n "$value" ]; then
-      echo "$value" | cut -d"=" -f2-
-    else
-      echo "$defaultValue"
-    fi
+  local file=$1; local key=$2; local defaultValue=$3
+  local value
+  value=$(cat "$file" | grep "$key=")
+  if [ $? ] && [ -n "$value" ]; then
+    echo "$value" | cut -d"=" -f2-
+  else
+    echo "$defaultValue"
+  fi
 }
 
 function assert_profile_exists() {
@@ -247,6 +252,10 @@ function assert_profile_exists() {
   if [ ! -f "$file" ]; then
     >&2 echo "Profile does not exist: ${profile}" && exit 1
   fi
+}
+
+function assert_git_repository() {
+  >/dev/null git status || exit 1
 }
 
 main "$@"
