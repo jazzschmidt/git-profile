@@ -18,7 +18,7 @@ $ RELEASE=v1.0 bash -c "$(curl -fsSL https://raw.github.com/jazzschmidt/git-prof
 
 ## Usage
 ### Create a Profile
-The create subcommand creates a new profile with the default
+The `create` subcommand creates a new profile with the default
 username and email from your global git configuration and can be
 configured interactively.
 
@@ -26,7 +26,7 @@ configured interactively.
 $ git profile create corporate
 user name [John Doe]: J. Doe
 user e-mail [john.doe@example.com]: doe@acme.com
-description [J. Doe <john.doe@example.com>]: My corporate profile 
+description [J. Doe <john.doe@acme.com>]: My corporate profile 
 ```
 
 ### List the Profiles
