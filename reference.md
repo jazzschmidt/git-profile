@@ -27,7 +27,8 @@ corporate - J. Doe <j.dow@acme.com>
 The `create` subcommand creates a new profile with the default
 username and email from your global git configuration and can be
 configured interactively. When no name argument is passed, it
-asks you to type it in.
+asks you to type it in. To further customize the profile, see
+[Edit a Profile](#edit-a-profile).
 
 ```bash
 $ git profile create
@@ -39,7 +40,8 @@ description [J. Doe <john.doe@acme.com>]: My corporate profile
 
 ## Edit a Profile
 The `edit` subcommand opens an editor to directly edit a profile
-configuration. If the git config `core.editor` is set, that editor
+configuration, e.g. with a custom SSH- or GPG-Key.
+If the git config `core.editor` is set, that editor
 is used, otherwise the `EDITOR` variable can define a program or,
 lastly, an editor such as `nano` or `vim` will be used. 
 
