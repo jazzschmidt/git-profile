@@ -5,4 +5,4 @@ Git Profile Management
 > Manage different git configurations with ease
 
 [About & Installation](/index#about)
-[Getting started](/index#getting-started)
+[Getting started](/getting-started)
