@@ -1,6 +1,7 @@
 # Configuration
-
 This is an overview of the used git configurations.
+
+## Overview
 
 Configuration | Level | Effect
 ------------- | ----- | ------
