@@ -12,7 +12,10 @@ Configuration | Level | Effect
 `core.editor` | global | The standard editor for commit messages, that will also be used to edit profiles.
 
 ---
+<div style="text-align: center;">
 
 Made with :heart: at [GitHub](https://github.com/jazzschmidt/git-profile)
 
-<small>Copyright © 2021 by Carsten Schmidt | Licensed under MIT License</small>
+<small>Copyright © 2021 by Carsten Schmidt | Licensed under [MIT License](https://github.com/jazzschmidt/git-profile/blob/master/LICENSE)</small>
+
+</div>
