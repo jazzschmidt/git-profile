@@ -1,5 +1,6 @@
 + [About](index#about)
-+ [Installation](index#installation)
+    + [Features](index#features)
+    + [Installation](index#installation)
 + [Getting started](getting-started#getting-started)
     + [Creating a profile](getting-started#creating-a-profile)
     + [Applying a Profile](getting-started#applying-a-profile)
