@@ -14,4 +14,4 @@ Configuration | Level | Effect
 
 Made with :heart: at [GitHub](https://github.com/jazzschmidt/git-profile)
 
-<small>Copyright © 2021 by Carsten Schmidt</small>
+<small>Copyright © 2021 by Carsten Schmidt | Licensed under MIT License</small>

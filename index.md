@@ -21,4 +21,4 @@ $ RELEASE=v1.0 bash -c "$(curl -fsSL https://raw.github.com/jazzschmidt/git-prof
 
 Made with :heart: at [GitHub](https://github.com/jazzschmidt/git-profile)
 
-<small>Copyright © 2021 by Carsten Schmidt</small>
+<small>Copyright © 2021 by Carsten Schmidt | Licensed under MIT License</small>
