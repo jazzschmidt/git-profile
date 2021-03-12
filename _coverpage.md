@@ -2,8 +2,7 @@ Git Profile Management
 
 # git-profile <small>1.0</small>
 
-> Simply manage different git configurations with profiles
+> Manage different git configurations with ease
 
-[GitHub](https://www.github.com/jazzschmidt/git-profile)
-[Installation](#Installation)
-[Usage](#Usage)
+[About & Installation](/index#about)
+[Getting started](/index#getting-started)

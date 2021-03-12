@@ -8,6 +8,12 @@
   <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0" name="viewport">
   <!-- Theme: Simple Dark -->
   <link href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css" rel="stylesheet">
+
+  <style type="text/css">
+    .sidebar-nav > ul > li > a {
+      font-weight: bold !important;
+    }
+  </style>
 </head>
 <body>
 <div id="app"></div>
@@ -15,7 +21,9 @@
   window.$docsify = {
     name: 'Git Profile Management',
     repo: 'jazzschmidt/git-profile',
-    coverpage: true
+    coverpage: true,
+    onlyCover: true,
+    loadSidebar: true,
   }
 </script>
 <!-- Docsify v4 -->
@@ -26,5 +34,8 @@
 <script src="//cdn.jsdelivr.net/npm/docsify-copy-code"></script>
 <!-- Prism Plugin -->
 <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
+<!-- Sidebar Collaps Plugin -->
+<script src="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
+
 </body>
 </html>
