@@ -16,9 +16,10 @@ This tool stands out with these features:
 
 - git cli integration
 - commit prevention via hook
+- interactive profile selection
 - convenient installation
 - runs as a bash script
-- is not limited to `user.name` and `user.email` configuration
+- not limited to `user.name` and `user.email` configuration
 
 ## Installation
 The addon is installed with an installer script, that you

@@ -4,6 +4,16 @@ Overview of all available `git profile` subcommands. Whenever any
 subcommand that needs a profile as an argument (e.g. `edit`) is
 invoked without such, an interactive menu will ask for it.
 
+That menu conveniently accepts the profile name or the prepended
+number:
+
+```bash
+$ git profile edit
+1) default - John Doe <john.doe@example.com>
+2) corporate - J. Doe <j.doe@acme.com>
+Select profile: █
+```
+
 ## Show active Profile
 When invoked without argument, `git profile` shows the
 current applied profile, if any, or displays an error.
@@ -20,7 +30,7 @@ with their description.
 ```bash
 $ git profile list
 default - John Doe <john.doe@example.com>
-corporate - J. Doe <j.dow@acme.com>
+corporate - My corporate profile
 ```
 
 ## Create a Profile
@@ -74,10 +84,11 @@ $ git profile apply corporate
 The `reset` subcommand *removes all configurations* from the local git
 configuration, which have been defined in the profile.
 
-!> Even manually changed configurations are removed.
+!> Even manually changed configurations are removed, if their keys are
+defined in the referenced profile.
 
 ```bash
-$ git profile 
+$ git profile reset
 ```
 
 ## Enable Profile Checking
