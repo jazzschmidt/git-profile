@@ -24,7 +24,7 @@ corporate
 ````
 
 ## List Profiles
-The `list` subcommands shows all available profiles along
+The `list` subcommand shows all available profiles along
 with their description.
 
 ```bash
@@ -73,7 +73,7 @@ Removed profile coprorate
 
 ## Apply a Profile
 The `apply` subcommand copies all configurations of the given profile
-into the repositories local git configuration and allows the commits
+into the repository local git configuration and allows the commits
 to pass the profile check.
 
 ```bash
@@ -93,7 +93,7 @@ $ git profile reset
 
 ## Enable Profile Checking
 If you previously disabled profile checking or disabled it globally, the
-`enable` subcommand activates it again.
+`enable` subcommand activates it again for the current repository.
 
 ```bash
 $ git profile enable
