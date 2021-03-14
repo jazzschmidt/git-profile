@@ -22,12 +22,29 @@ This tool stands out with these features:
 - not limited to `user.name` and `user.email` configuration
 
 ## Installation
-The addon is installed with an installer script, that you
+The addon is installed with an interactive installer script, that you
 can run via your shell. Simply prepend the version you want to install.
 
 ```bash
 $ RELEASE=v1.0 bash -c "$(curl -fsSL https://raw.github.com/jazzschmidt/git-profile/master/install.sh)"
 ```
+
+The installation will ask for a few options with sane defaults and looks
+something like this:
+
+> <pre>
+> Hook will be installed into:
+> Select a directory [/Users/jdoe/.git/hooks]:
+> Profile configurations will be written into:
+> Select a directory [/Users/jdoe/.git/profiles]:
+> Downloading v1.0... done
+> Installing... done
+> 
+> Finished installation.
+> ----------------------
+> Thanks for using this plugin!
+> Feel free to support me via GitHub: https://github.com/jazzschmidt/git-profile
+> </pre>
 
 When committing from a repository without a profile applied,
 the commit will be cancelled from now on.
