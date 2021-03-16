@@ -23,7 +23,7 @@ function main() {
 
 
   # Configure profiles path if not already present
-  if ! profilesPath=$(git config --global profiles.path); then
+  if ! profilesPath=$(git config --global profile.path); then
     echo "Profile configurations will be written into:"
     read -rp "Select a directory [$DEFAULT_PROFILES_PATH]: " profilesPath
     profilesPath=${profilesPath:-$DEFAULT_PROFILES_PATH}
