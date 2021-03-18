@@ -10,7 +10,7 @@ number:
 ```bash
 $ git profile edit
 1) default - John Doe <john.doe@example.com>
-2) corporate - J. Doe <j.doe@acme.com>
+2) corporate - My corporate profile
 Select profile: █
 ```
 
@@ -44,7 +44,7 @@ asks you to type it in. To further customize the profile, see
 $ git profile create
 Profile name: corporate
 user name [John Doe]: J. Doe
-user e-mail [john.doe@example.com]: doe@acme.com
+user e-mail [john.doe@example.com]: j.doe@acme.com
 description [J. Doe <john.doe@acme.com>]: My corporate profile
 ```
 
