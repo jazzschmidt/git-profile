@@ -12,8 +12,8 @@ configured interactively. To further customize the profile, see
 ```bash
 $ git profile create corporate
 user name [John Doe]: J. Doe
-user e-mail [john.doe@example.com]: doe@acme.com
-description [J. Doe <john.doe@acme.com>]: My corporate profile
+user e-mail [john.doe@example.com]: j.doe@acme.com
+description [J. Doe <j.doe@acme.com>]: My corporate profile
 ```
 
 ## Applying a Profile
